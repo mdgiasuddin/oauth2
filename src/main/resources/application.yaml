@@ -1,0 +1,44 @@
+server:
+  port: 8194
+
+spring:
+  application:
+    name: oauth2
+
+  datasource:
+    url: jdbc:postgresql://localhost:5435/oauth_db
+    username: postgres
+    password: pass_1234
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    show-sql: true
+    #    hibernate:
+    #      ddl-auto: create
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: ${GOOGLE_CLIENT_ID}
+            client-secret: ${GOOGLE_CLIENT_SECRET}
+            scope: email, profile
+            redirect-uri: "{baseUrl}/login/oauth2/code/google"
+
+          github:
+            client-id: ${GITHUB_CLIENT_ID}
+            client-secret: ${GITHUB_CLIENT_SECRET}
+            scope:
+              - read:user
+              - user:email
+            redirect-uri: "{baseUrl}/login/oauth2/code/github"
+
+application:
+  security:
+    jwt:
+      signing-key: 2f41dad4ddc4679c66a17efbef8a691d6de5b82ac07affe2bc9b98451cb6763f6f1d24b03cf8e41526de1f21efc4dde234c223ccfbe62bf02d34f9cd55382c0e
