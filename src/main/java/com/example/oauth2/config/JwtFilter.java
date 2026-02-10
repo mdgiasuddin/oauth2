@@ -1,7 +1,7 @@
 package com.example.oauth2.config;
 
-import com.example.oauth2.UserRepository;
 import com.example.oauth2.model.entity.User;
+import com.example.oauth2.repository.UserRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

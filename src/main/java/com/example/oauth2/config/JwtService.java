@@ -38,7 +38,7 @@ public class JwtService {
     }
 
     public String generateToken(String username) {
-        long expiration = 30;
+        long expiration = 2;
         return generateToken(new HashMap<>(), username, expiration);
     }
 
