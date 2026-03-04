@@ -36,7 +36,7 @@ public class OAuthSuccessHandler implements AuthenticationSuccessHandler {
         String token = jwtService.generateToken(username);
 
         response.sendRedirect(
-                "http://localhost:3000/login?access_token=" + token
+                "http://localhost:5173/login?access_token=" + token
         );
     }
 
