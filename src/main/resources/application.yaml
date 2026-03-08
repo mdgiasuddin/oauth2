@@ -41,5 +41,9 @@ spring:
 
 application:
   security:
+    ui-redirect-url: http://localhost:5175/login
     jwt:
+      validity-minute: 2
       signing-key: ${JWT_SIGNING_KEY}
+    refresh-token:
+      validity-day: 7

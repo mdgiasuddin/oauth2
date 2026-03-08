@@ -1,7 +1,8 @@
 package com.example.oauth2.controller;
 
 import com.example.oauth2.model.dto.request.LoginRequest;
-import com.example.oauth2.model.dto.response.LoginResponse;
+import com.example.oauth2.model.dto.request.TokenRefreshRequest;
+import com.example.oauth2.model.dto.response.TokenResponse;
 import com.example.oauth2.service.AuthenticationService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +19,12 @@ public class AuthenticationController {
     private final AuthenticationService authenticationService;
 
     @PostMapping("/login")
-    public LoginResponse login(@Valid @RequestBody LoginRequest request) {
+    public TokenResponse login(@Valid @RequestBody LoginRequest request) {
         return authenticationService.login(request);
+    }
+
+    @PostMapping("/refresh/access-token")
+    public TokenResponse refreshAccessToken(@Valid @RequestBody TokenRefreshRequest request) {
+        return authenticationService.refreshAccessToken(request);
     }
 }

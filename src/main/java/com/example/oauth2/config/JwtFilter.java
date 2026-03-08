@@ -1,7 +1,7 @@
 package com.example.oauth2.config;
 
 import com.example.oauth2.model.entity.User;
-import com.example.oauth2.repository.UserRepository;
+import com.example.oauth2.service.UserService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -23,8 +23,8 @@ import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 @RequiredArgsConstructor
 public class JwtFilter extends OncePerRequestFilter {
 
+    private final UserService userService;
     private final JwtService jwtService;
-    private final UserRepository userRepository;
 
     @Override
     protected void doFilterInternal(
@@ -42,10 +42,9 @@ public class JwtFilter extends OncePerRequestFilter {
         final String accessToken = authHeader.substring(7);
         String username = jwtService.extractUsername(accessToken);
 
-        User user = userRepository.findByUsername(username)
-                .orElseThrow();
+        User user = userService.findByUsername(username);
+        log.info("User login via JWT: {}", username);
 
-        log.info("User login via JWT: {}", user);
         UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
                 username,
                 null,

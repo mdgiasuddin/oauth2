@@ -28,6 +28,9 @@ public class JwtService {
     @Value("${application.security.jwt.signing-key}")
     private String signingKey;
 
+    @Value("${application.security.jwt.validity-minute}")
+    private long jwtValidity;
+
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
     }
@@ -39,16 +42,16 @@ public class JwtService {
 
     public String generateToken(String username) {
         long expiration = 60;
-        return generateToken(new HashMap<>(), username, expiration);
+        return generateToken(new HashMap<>(), username);
     }
 
-    public String generateToken(Map<String, Object> extraClaims, String username, long expiration) {
+    public String generateToken(Map<String, Object> extraClaims, String username) {
         return Jwts
                 .builder()
                 .claims(extraClaims)
                 .subject(username)
                 .issuedAt(new Date())
-                .expiration(new Date(System.currentTimeMillis() + expiration * 60 * 1000))
+                .expiration(new Date(System.currentTimeMillis() + jwtValidity * 60 * 1000))
                 .signWith(createSignKey())
                 .compact();
     }
