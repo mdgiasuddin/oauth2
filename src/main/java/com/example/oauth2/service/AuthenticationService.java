@@ -28,7 +28,7 @@ public class AuthenticationService {
                 request.password()
         ));
 
-        User user = userService.findByUsername(request.username());
+        User user = (User) authentication.getPrincipal();
         String accessToken = jwtService.generateToken(request.username());
         String refreshToken = refreshTokenService.generateNewToken(user);
         return new TokenResponse(accessToken, refreshToken);
