@@ -1,11 +1,8 @@
 package com.example.oauth2.model.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 
-public record EmployeeUpdateRequest(
-        @NotNull
-        Long id,
+public record EmployeeRequest(
         @NotBlank
         String firstName,
         @NotBlank

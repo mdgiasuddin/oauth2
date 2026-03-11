@@ -1,8 +1,6 @@
 package com.example.oauth2.controller;
 
-import com.example.oauth2.model.dto.request.EmployeeCreateRequest;
-import com.example.oauth2.model.dto.request.EmployeeDeleteResponse;
-import com.example.oauth2.model.dto.request.EmployeeUpdateRequest;
+import com.example.oauth2.model.dto.request.EmployeeRequest;
 import com.example.oauth2.model.dto.response.EmployeeResponse;
 import com.example.oauth2.service.EmployeeService;
 import jakarta.validation.Valid;
@@ -26,13 +24,13 @@ public class EmployeeController {
     private final EmployeeService employeeService;
 
     @PostMapping
-    public EmployeeResponse createEmployee(@Valid @RequestBody EmployeeCreateRequest request) {
+    public EmployeeResponse createEmployee(@Valid @RequestBody EmployeeRequest request) {
         return employeeService.createEmployee(request);
     }
 
-    @PutMapping
-    public EmployeeResponse updateEmployee(@Valid @RequestBody EmployeeUpdateRequest request) {
-        return employeeService.updateEmployee(request);
+    @PutMapping("/{id}")
+    public EmployeeResponse updateEmployee(@PathVariable long id, @Valid @RequestBody EmployeeRequest request) {
+        return employeeService.updateEmployee(id, request);
     }
 
     @GetMapping
@@ -46,7 +44,7 @@ public class EmployeeController {
     }
 
     @DeleteMapping("/{id}")
-    public EmployeeDeleteResponse deleteEmployee(@PathVariable Long id) {
-        return employeeService.deleteEmployee(id);
+    public void deleteEmployee(@PathVariable Long id) {
+        employeeService.deleteEmployee(id);
     }
 }
