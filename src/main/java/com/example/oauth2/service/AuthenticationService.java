@@ -3,7 +3,7 @@ package com.example.oauth2.service;
 import com.example.oauth2.config.JwtService;
 import com.example.oauth2.model.dto.request.LoginRequest;
 import com.example.oauth2.model.dto.request.TokenRefreshRequest;
-import com.example.oauth2.model.dto.response.TokenResponse;
+import com.example.oauth2.model.dto.response.AuthResponse;
 import com.example.oauth2.model.entity.RefreshToken;
 import com.example.oauth2.model.entity.User;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +21,7 @@ public class AuthenticationService {
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
 
-    public TokenResponse login(LoginRequest request) {
+    public AuthResponse login(LoginRequest request) {
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
                 request.username(),
                 request.password()
@@ -30,16 +30,17 @@ public class AuthenticationService {
         User user = (User) authentication.getPrincipal();
         String accessToken = jwtService.generateToken(request.username());
         String refreshToken = refreshTokenService.generateNewToken(user);
-        return new TokenResponse(accessToken, refreshToken);
+        return new AuthResponse(user.getName(), accessToken, refreshToken);
     }
 
     @Transactional
-    public TokenResponse refreshAccessToken(TokenRefreshRequest request) {
+    public AuthResponse refreshAccessToken(TokenRefreshRequest request) {
         RefreshToken refreshToken = refreshTokenService.validateToken(request.refreshToken());
         User user = refreshToken.getUser();
         String accessToken = jwtService.generateToken(user.getUsername());
 
-        return new TokenResponse(
+        return new AuthResponse(
+                user.getName(),
                 accessToken,
                 String.format("%s-%s", refreshToken.getId().toString(), refreshToken.getRotationKey())
         );

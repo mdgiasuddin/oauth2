@@ -3,7 +3,7 @@ package com.example.oauth2.controller;
 import com.example.oauth2.model.dto.request.LoginRequest;
 import com.example.oauth2.model.dto.request.TokenRefreshRequest;
 import com.example.oauth2.model.dto.request.UserRegistrationRequest;
-import com.example.oauth2.model.dto.response.TokenResponse;
+import com.example.oauth2.model.dto.response.AuthResponse;
 import com.example.oauth2.service.AuthenticationService;
 import com.example.oauth2.service.UserService;
 import jakarta.validation.Valid;
@@ -27,12 +27,12 @@ public class AuthenticationController {
     }
 
     @PostMapping("/login")
-    public TokenResponse login(@Valid @RequestBody LoginRequest request) {
+    public AuthResponse login(@Valid @RequestBody LoginRequest request) {
         return authenticationService.login(request);
     }
 
     @PostMapping("/refresh/access-token")
-    public TokenResponse refreshAccessToken(@Valid @RequestBody TokenRefreshRequest request) {
+    public AuthResponse refreshAccessToken(@Valid @RequestBody TokenRefreshRequest request) {
         return authenticationService.refreshAccessToken(request);
     }
 }

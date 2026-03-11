@@ -25,8 +25,8 @@ public class OAuthSuccessHandler implements AuthenticationSuccessHandler {
     private final JwtService jwtService;
     private final RefreshTokenService refreshTokenService;
 
-    @Value("${application.security.ui-redirect-url}")
-    private String uiRedirectUrl;
+    @Value("${application.security.ui-url}")
+    private String uiUrl;
 
     @Override
     public void onAuthenticationSuccess(
@@ -42,7 +42,8 @@ public class OAuthSuccessHandler implements AuthenticationSuccessHandler {
         String refreshToken = refreshTokenService.generateNewToken(user);
 
         response.sendRedirect(
-                String.format("%s?access_token=%s&refresh_token=%s", uiRedirectUrl, accessToken, refreshToken)
+                String.format("%s/login?name=%s&access_token=%s&refresh_token=%s", uiUrl, user.getName(),
+                        accessToken, refreshToken)
         );
     }
 
