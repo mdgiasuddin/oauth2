@@ -1,6 +1,5 @@
 package com.example.oauth2.model.entity;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -29,18 +28,10 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
 
-    @Column(unique = true, nullable = false, columnDefinition = "varchar(50)")
     private String username;
-
-    @Column(nullable = false, columnDefinition = "varchar(50)")
     private String name;
-
-    @Column(nullable = false, columnDefinition = "boolean default true")
     private boolean active = true;
-
     private String password;
-
-    @Column(nullable = false, columnDefinition = "varchar(20) default 'USER'")
     private String role = "USER";
 
     @Override
