@@ -1,6 +1,7 @@
 package com.example.oauth2.controller;
 
 import com.example.oauth2.model.dto.request.LoginRequest;
+import com.example.oauth2.model.dto.request.LogoutRequest;
 import com.example.oauth2.model.dto.request.TokenRefreshRequest;
 import com.example.oauth2.model.dto.request.UserRegistrationRequest;
 import com.example.oauth2.model.dto.response.AuthResponse;
@@ -34,5 +35,10 @@ public class AuthenticationController {
     @PostMapping("/refresh/access-token")
     public AuthResponse refreshAccessToken(@Valid @RequestBody TokenRefreshRequest request) {
         return authenticationService.refreshAccessToken(request);
+    }
+
+    @PostMapping("/logout")
+    public void logout(@Valid @RequestBody LogoutRequest request) {
+        authenticationService.logout(request);
     }
 }

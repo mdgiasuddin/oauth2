@@ -2,6 +2,7 @@ package com.example.oauth2.service;
 
 import com.example.oauth2.config.JwtService;
 import com.example.oauth2.model.dto.request.LoginRequest;
+import com.example.oauth2.model.dto.request.LogoutRequest;
 import com.example.oauth2.model.dto.request.TokenRefreshRequest;
 import com.example.oauth2.model.dto.response.AuthResponse;
 import com.example.oauth2.model.entity.RefreshToken;
@@ -44,5 +45,9 @@ public class AuthenticationService {
                 accessToken,
                 String.format("%s-%s", refreshToken.getId().toString(), refreshToken.getRotationKey())
         );
+    }
+
+    public void logout(LogoutRequest request) {
+        refreshTokenService.removeRefreshToken(request.refreshToken());
     }
 }

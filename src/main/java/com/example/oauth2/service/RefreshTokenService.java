@@ -25,6 +25,16 @@ public class RefreshTokenService {
 
     private final int rotationKeyLen = 10;
 
+    private RefreshToken getRefreshToken(String token) {
+        UUID id = UUID.fromString(token.substring(0, token.length() - (rotationKeyLen + 1)));
+
+        return refreshTokenRepository.findRefreshTokenById(id)
+                .orElseThrow(() -> {
+                    log.warn("Refresh not found for id: {}", id);
+                    return new IllegalArgumentException("Refresh token not found for id: " + id);
+                });
+    }
+
     public String generateNewToken(User user) {
         RefreshToken refreshToken = new RefreshToken();
         refreshToken.setUser(user);
@@ -36,14 +46,8 @@ public class RefreshTokenService {
     }
 
     public RefreshToken validateToken(String token) {
-        UUID id = UUID.fromString(token.substring(0, token.length() - (rotationKeyLen + 1)));
+        RefreshToken refreshToken = getRefreshToken(token);
         String rotationKey = token.substring(token.length() - rotationKeyLen);
-
-        RefreshToken refreshToken = refreshTokenRepository.findRefreshTokenById(id)
-                .orElseThrow(() -> {
-                    log.warn("Refresh not found for id: {}", id);
-                    return new IllegalArgumentException("Refresh token not found for id: " + id);
-                });
 
         if (!refreshToken.getRotationKey().equals(rotationKey) || refreshToken.getExpiryDate().isBefore(LocalDateTime.now())) {
             log.info("Refresh: {}, {}, {}", refreshToken.getRotationKey(), rotationKey, refreshToken.getExpiryDate());
@@ -53,5 +57,10 @@ public class RefreshTokenService {
         refreshToken.setExpiryDate(LocalDateTime.now().plusDays(refreshTokenValidity));
         refreshToken.setRotationKey(randomStringUtil.randomAlphanumericLower(rotationKeyLen));
         return refreshTokenRepository.save(refreshToken);
+    }
+
+    public void removeRefreshToken(String token) {
+        RefreshToken refreshToken = getRefreshToken(token);
+        refreshTokenRepository.delete(refreshToken);
     }
 }
